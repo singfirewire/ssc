@@ -261,7 +261,7 @@
             <div class="info-cards">
                 <div class="info-card">
                     <h3>💡 เงินเดือน ≤ 1,650 บาท</h3>
-                    <p>จ่ายประกันสังคม 82.50 บาท (1,650 × 5%)</p>
+                    <p>จ่ายประกันสังคม 83 บาท (1,650 × 5% ปัดเศษ)</p>
                 </div>
                 
                 <div class="info-card">
@@ -275,10 +275,10 @@
                 </div>
             </div>
         </div>
-
-        <div style="text-align: center; margin-top: 40px; padding-bottom: 20px;">
-            <p style="color: #888; font-size: 0.9rem; opacity: 0.7;">พัฒนาโดย 1O1</p>
-        </div>
+        
+        <footer style="text-align: center; padding: 20px; color: #666; font-size: 0.9rem; background: #f8f9fa;">
+            พัฒนาโดย 1O1
+        </footer>
     </div>
 
     <script>
@@ -294,18 +294,14 @@
             
             // ใช้สูตรตามที่แสดงในภาพ
             if (salary <= 1650) {
-                socialSecurityAmount = 1650 * 0.05; // 82.50 บาท
+                socialSecurityAmount = Math.round(1650 * 0.05); // ปัดเศษ 82.50 → 83
             } else if (salary <= 15000) {
-                socialSecurityAmount = salary * 0.05;
+                socialSecurityAmount = Math.round(salary * 0.05); // ปัดเศษ
             } else {
-                socialSecurityAmount = 15000 * 0.05; // 750 บาท
+                socialSecurityAmount = Math.round(15000 * 0.05); // ปัดเศษ 750
             }
 
             const netSalary = salary - socialSecurityAmount;
-
-            // ปัดเศษเป็นจำนวนเต็ม
-            socialSecurityAmount = Math.round(socialSecurityAmount);
-            const roundedNetSalary = Math.round(netSalary);
 
             // แสดงผลลัพธ์
             document.getElementById('inputSalary').textContent = salary.toLocaleString('th-TH', {
@@ -315,7 +311,10 @@
             
             document.getElementById('socialSecurityAmount').textContent = socialSecurityAmount.toLocaleString('th-TH') + ' บาท';
             
-            document.getElementById('netSalary').textContent = roundedNetSalary.toLocaleString('th-TH') + ' บาท';
+            document.getElementById('netSalary').textContent = netSalary.toLocaleString('th-TH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' บาท';
 
             // แสดงส่วนผลลัพธ์
             document.getElementById('resultSection').style.display = 'block';
