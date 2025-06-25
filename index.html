@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคำนวณประกันสังคม</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .input-section {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-title {
+            color: #2d3748;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #4a5568;
+            flex: 1;
+        }
+
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .formula-section {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .formula-title {
+            font-weight: 700;
+            color: #e53e3e;
+            margin-bottom: 10px;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: #4facfe;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .info-card h3 {
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 เครื่องคำนวณประกันสังคม</h1>
+            <p>คำนวณเงินสมทบประกันสังคมจากเงินเดือนของคุณ</p>
+        </div>
+
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="salary">💰 เงินเดือน (บาท)</label>
+                    <input type="number" id="salary" placeholder="กรอกเงินเดือนของคุณ" min="0" step="0.01">
+                </div>
+                
+                <button class="calculate-btn" onclick="calculateSocialSecurity()">
+                    ✨ คำนวณประกันสังคม
+                </button>
+            </div>
+
+            <div class="result-section" id="resultSection">
+                <div class="result-title">📊 ผลการคำนวณ</div>
+                
+                <div class="result-item">
+                    <div class="result-label">เงินเดือนที่กรอก:</div>
+                    <div class="result-value" id="inputSalary">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">เงินสมทบประกันสังคม:</div>
+                    <div class="result-value" id="socialSecurityAmount">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">เงินเดือนหลังหักประกันสังคม:</div>
+                    <div class="result-value" id="netSalary">-</div>
+                </div>
+            </div>
+
+            <div class="formula-section">
+                <div class="formula-title">📝 สูตรการคำนวณ</div>
+                <div class="formula">
+                    =IF(B5&lt;=1650, 1650*5%, IF(B5&lt;=15000, B5*5%, 15000*5%))
+                </div>
+                <p style="margin-top: 10px; color: #666;">
+                    <strong>หมายเหตุ:</strong> B5 = เงินเดือน | 1650 = ค่าจ้างต่ำสุดในการคำนวณ | 15000 = ค่าจ้างสูงสุดในการคำนวณ | 5% = อัตราการคำนวณประกันสังคม
+                </p>
+            </div>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3>💡 เงินเดือน ≤ 1,650 บาท</h3>
+                    <p>จ่ายประกันสังคม 82.50 บาท (1,650 × 5%)</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>💡 เงินเดือน 1,651-15,000 บาท</h3>
+                    <p>จ่ายประกันสังคม 5% ของเงินเดือนจริง</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>💡 เงินเดือน > 15,000 บาท</h3>
+                    <p>จ่ายประกันสังคมสูงสุด 750 บาท (15,000 × 5%)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateSocialSecurity() {
+            const salary = parseFloat(document.getElementById('salary').value);
+            
+            if (isNaN(salary) || salary < 0) {
+                alert('กรุณากรอกเงินเดือนที่ถูกต้อง');
+                return;
+            }
+
+            let socialSecurityAmount;
+            
+            // ใช้สูตรตามที่แสดงในภาพ
+            if (salary <= 1650) {
+                socialSecurityAmount = 1650 * 0.05; // 82.50 บาท
+            } else if (salary <= 15000) {
+                socialSecurityAmount = salary * 0.05;
+            } else {
+                socialSecurityAmount = 15000 * 0.05; // 750 บาท
+            }
+
+            const netSalary = salary - socialSecurityAmount;
+
+            // แสดงผลลัพธ์
+            document.getElementById('inputSalary').textContent = salary.toLocaleString('th-TH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' บาท';
+            
+            document.getElementById('socialSecurityAmount').textContent = socialSecurityAmount.toLocaleString('th-TH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' บาท';
+            
+            document.getElementById('netSalary').textContent = netSalary.toLocaleString('th-TH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' บาท';
+
+            // แสดงส่วนผลลัพธ์
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // เลื่อนไปยังผลลัพธ์
+            document.getElementById('resultSection').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        // เพิ่มการคำนวณแบบเรียลไทม์เมื่อพิมพ์
+        document.getElementById('salary').addEventListener('input', function() {
+            const salary = parseFloat(this.value);
+            if (!isNaN(salary) && salary > 0) {
+                calculateSocialSecurity();
+            }
+        });
+
+        // คำนวณเมื่อกด Enter
+        document.getElementById('salary').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateSocialSecurity();
+            }
+        });
+    </script>
+</body>
+</html>
