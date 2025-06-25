@@ -275,6 +275,10 @@
                 </div>
             </div>
         </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-bottom: 20px;">
+            <p style="color: #888; font-size: 0.9rem; opacity: 0.7;">พัฒนาโดย 1O1</p>
+        </div>
     </div>
 
     <script>
@@ -299,21 +303,19 @@
 
             const netSalary = salary - socialSecurityAmount;
 
+            // ปัดเศษเป็นจำนวนเต็ม
+            socialSecurityAmount = Math.round(socialSecurityAmount);
+            const roundedNetSalary = Math.round(netSalary);
+
             // แสดงผลลัพธ์
             document.getElementById('inputSalary').textContent = salary.toLocaleString('th-TH', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             }) + ' บาท';
             
-            document.getElementById('socialSecurityAmount').textContent = socialSecurityAmount.toLocaleString('th-TH', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + ' บาท';
+            document.getElementById('socialSecurityAmount').textContent = socialSecurityAmount.toLocaleString('th-TH') + ' บาท';
             
-            document.getElementById('netSalary').textContent = netSalary.toLocaleString('th-TH', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + ' บาท';
+            document.getElementById('netSalary').textContent = roundedNetSalary.toLocaleString('th-TH') + ' บาท';
 
             // แสดงส่วนผลลัพธ์
             document.getElementById('resultSection').style.display = 'block';
